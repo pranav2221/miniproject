@@ -1,0 +1,65 @@
+create database hr_analytics;
+use hr_analytics;
+create table hr_attrition(
+    Age INT,
+	Attrition VARCHAR(5),
+	BusinessTravel VARCHAR(50),
+	Department VARCHAR(50),
+	DistanceFromHome INT,
+	Education INT,
+	EducationField VARCHAR(50),
+	Gender varchar(10),
+	JobRole varchar(50),
+	JobLevel INT,
+	JobSatisfaction INT,
+    MaritalStatus VARCHAR(20),
+    MonthlyIncome INT,
+    OverTime VARCHAR(5),
+    PercentSalaryHike INT,
+    TotalWorkingYears INT,
+    TrainingTimesLastYear INT,
+    WorkLifeBalance INT,
+    YearsAtCompany INT,
+    YearsInCurrentRole INT,
+    YearsSinceLastPromotion INT,
+    YearsWithCurrManager INT
+);
+
+1.verify data is imported or not 
+select count(*) from hr_attrition;
+select * from hr_attrition limit 10;
+
+2.Find Total Employees
+Select count(*) as total_employee
+from hr_attrition;
+
+3.Find Attrition Count 
+select Attrition,count(*) as employee_count
+from hr_attrition 
+group by Attrition;
+
+4.Find Attrition Rate 
+SELECT 
+ROUND(SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) * 100.0 / COUNT(*),2) AS attrition_rate_percent
+FROM hr_attrition;
+
+5.Find Attrition by department 
+select Department,count(*) as attrition_count
+from hr_attrition
+where Attrition = 'Yes'
+group by Department
+order by attrition_count desc;
+
+6.Department wise attrition rate 
+select Department,count(*) as total_employees,
+sum(case when Attrition = 'Yes' then 1 else 0 end) as attrition_count,
+round(sum(case when Attrition = 'Yes' then 1 else 0 end)*100/count(*),2) as attrition_rate_percent
+from hr_attrition
+group by Department;
+
+-- Salary and Compensation Insights
+
+7.Average Monthly Income(Attrition vs Non-Attrition)
+select Attrition,round(avg(MonthlyIncome),2) as avg_income
+from hr_attrition
+group by Attrition;
