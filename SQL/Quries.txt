@@ -63,3 +63,56 @@ group by Department;
 select Attrition,round(avg(MonthlyIncome),2) as avg_income
 from hr_attrition
 group by Attrition;
+
+
+8.Employees with Income Below Company Average
+select count(*) as low_salary_employees
+from hr_attrition
+where MonthlyIncome < (select avg(MonthlyIncome) from hr_attrition);
+
+9.Attrition count for low salary employees
+select count(*) as low_salary_employees
+from hr_attrition
+where Attrition='Yes' and MonthlyIncome < (select avg(MonthlyIncome) from hr_attrition);
+
+-- Overtime and Work-Life balance 
+
+10.Attrition by OverTime 
+select OverTime,count(*) as attrition_count
+from hr_attrition 
+where Attrition='Yes'
+group by OverTime;
+
+11.OverTime Attrition rate
+select OverTime,count(*) as total_employees,
+sum(case when Attrition='Yes' then 1 else 0 end) as attrition_count,
+round(sum(case when Attrition = 'Yes' then 1 else 0 end)*100/count(*),2) as attrition_rate_percent
+from hr_attrition
+group by OverTime;
+
+12.Attrition Vs Work-Life Balance
+select WorkLifeBalance,count(*) as attrition_count
+from hr_attrition
+where Attrition='Yes'
+group by WorkLifeBalance
+order by WorkLifeBalance;
+
+-- Job Role & Experience Analysis
+
+13.Attrition by Job Role 
+select JobRole,count(*) as attrition_count
+from hr_attrition
+where Attrition = 'Yes'
+group by JobRole
+order by attrition_count desc;
+
+14.Average Years at Company 
+select Attrition,round(avg(YearsAtCompany),2) as avg_years
+from hr_attrition
+group by Attrition;
+
+15.Attrition in First 3 years
+select count(*) as early_attrition
+from hr_attrition
+where Attrition='Yes'
+and YearsAtCompany <= 3;
