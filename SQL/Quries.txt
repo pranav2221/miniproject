@@ -116,3 +116,45 @@ select count(*) as early_attrition
 from hr_attrition
 where Attrition='Yes'
 and YearsAtCompany <= 3;
+
+-- Satisfaction & Training 
+
+16.Attrition By Job Satisfaction 
+select JobSatisfaction,count(*) as attrition_count
+from hr_attrition
+where Attrition = 'Yes'
+group by JobSatisfaction 
+order by JobSatisfaction;
+
+17.Attrition Vs Training 
+select TrainingTimesLastYear,count(*) attrition_count
+from hr_attrition
+where Attrition = 'Yes'
+group by TrainingTimesLastYear
+order by TrainingTimesLastYear;
+
+--High-Risk Employees Profile
+
+18.High-Risk Employees (HR Focus)
+select * from hr_attrition
+where Attrition='Yes'
+and OverTime='Yes'
+AND MonthlyIncome < (select avg(MonthlyIncome) from hr_attrition)
+AND JobSatisfaction <=2 ;
+
+19.Department with Highest High-Risk Employees
+select Department,count(*) as high_risk_count
+from hr_attrition
+where OverTime = 'Yes'
+AND JobSatisfaction <=2
+group by Department
+order by high_risk_count desc;
+
+-- Summary Insights 
+20.Top 5 Job roles with Highest Attrition
+select JobRole,count(*) as attrition_count
+from hr_attrition
+where Attrition='Yes'
+group by JobRole
+order by attrition_count desc
+limit 5;
